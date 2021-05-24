@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    _PROJECT_NAME: "user14-products"
+    _PROJECT_NAME: "user05-message"
 
 phases:
   install:
@@ -38,61 +38,8 @@ phases:
       - kubectl config set-credentials admin --token="$KUBE_TOKEN"
       - kubectl config set-context default --cluster=k8s --user=admin
       - kubectl config use-context default
-      - |
-          cat <<EOF | kubectl apply -f -
-          apiVersion: v1
-          kind: Service
-          metadata:
-            name: $_PROJECT_NAME
-            labels:
-              app: $_PROJECT_NAME
-          spec:
-            ports:
-              - port: 8080
-                targetPort: 8080
-            selector:
-              app: $_PROJECT_NAME
-          EOF
-      - |
-          cat  <<EOF | kubectl apply -f -
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            name: $_PROJECT_NAME
-            labels:
-              app: $_PROJECT_NAME
-          spec:
-            replicas: 3
-            selector:
-              matchLabels:
-                app: $_PROJECT_NAME
-            template:
-              metadata:
-                labels:
-                  app: $_PROJECT_NAME
-              spec:
-                containers:
-                  - name: $_PROJECT_NAME
-                    image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
-                    ports:
-                      - containerPort: 8080
-                    readinessProbe:
-                      httpGet:
-                        path: /actuator/health
-                        port: 8080
-                      initialDelaySeconds: 10
-                      timeoutSeconds: 2
-                      periodSeconds: 5
-                      failureThreshold: 10
-                    livenessProbe:
-                      httpGet:
-                        path: /actuator/health
-                        port: 8080
-                      initialDelaySeconds: 120
-                      timeoutSeconds: 2
-                      periodSeconds: 5
-                      failureThreshold: 5
-          EOF
+      - kubectl replace -f kubernetes/deployment.yml --force
+      - kubectl replace -f kubernetes/service.yml --force
 
 #cache:
 #  paths:
