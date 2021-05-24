@@ -38,8 +38,8 @@ phases:
       - kubectl config set-credentials admin --token="$KUBE_TOKEN"
       - kubectl config set-context default --cluster=k8s --user=admin
       - kubectl config use-context default
-      - kubectl replace -f kubernetes/deployment.yml --force
-      - kubectl replace -f kubernetes/service.yml --force
+      - kubectl apply -f kubernetes/deployment.yml
+      - kubectl apply -f kubernetes/service.yml
 
 #cache:
 #  paths:
