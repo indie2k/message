@@ -3,6 +3,7 @@ version: 0.2
 env:
   variables:
     _PROJECT_NAME: "user05-message"
+    _SERVICE_NAME: "message"
 
 phases:
   install:
@@ -45,38 +46,38 @@ phases:
           apiVersion: v1
           kind: Service
           metadata:
-            name: $_PROJECT_NAME
+            name: $_SERVICE_NAME
             namespace: airbnb
             labels:
-              app: $_PROJECT_NAME
+              app: $_SERVICE_NAME
           spec:
             ports:
               - port: 8080
                 targetPort: 8080
             selector:
-              app: $_PROJECT_NAME
+              app: $_SERVICE_NAME
           EOF
       - |
           cat  <<EOF | kubectl apply -f -
           apiVersion: apps/v1
           kind: Deployment
           metadata:
-            name: $_PROJECT_NAME
+            name: $_SERVICE_NAME
             namespace: airbnb
             labels:
-              app: $_PROJECT_NAME
+              app: $_SERVICE_NAME
           spec:
             replicas: 1
             selector:
               matchLabels:
-                app: $_PROJECT_NAME
+                app: $_SERVICE_NAME
             template:
               metadata:
                 labels:
-                  app: $_PROJECT_NAME
+                  app: $_SERVICE_NAME
               spec:
                 containers:
-                  - name: $_PROJECT_NAME
+                  - name: $_SERVICE_NAME
                     image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
                     ports:
                       - containerPort: 8080
