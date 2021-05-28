@@ -5,6 +5,8 @@ public class ReservationCancelled extends AbstractEvent {
     private Long rsvId;
     private Long roomId;
     private String status;
+    private Long payId;
+    private Long carId; // 렌터카도 예약이 될 경우 들어옴
 
     public ReservationCancelled(){
         super();
@@ -31,4 +33,21 @@ public class ReservationCancelled extends AbstractEvent {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Long getPayId() {
+        return payId;
+    }
+
+    public void setPayId(Long payId) {
+        this.payId = payId;
+    }
+
+    public Long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Long carId) {
+        this.carId = carId;
+    }
+
 }

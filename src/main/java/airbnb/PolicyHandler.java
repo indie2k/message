@@ -59,6 +59,49 @@ public class PolicyHandler{
         }
     }
 
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverCarReserved_SendCarResvMsg(@Payload CarReserved carReserved){
+
+        if(carReserved.isMe()) {
+
+            //////////////////
+            // 렌터카 예약 시 
+            /////////////////
+            System.out.println("\n\n##### listener SendCarResvMsg : " + carReserved.toJson() + "\n\n");
+
+            long carId = carReserved.getCarId();
+            String carName = carReserved.getCarName();
+            long roomId = carReserved.getRoomId(); // 연관 RoomId
+            String msgString = "렌터카가 예약 되었습니다. 방 번호 : [" + roomId + "], 렌터카번호["+carId+"], 렌터카명 ["+carName+"]";
+
+            // 메시지 전송
+            sendMsg(roomId, msgString);
+            
+            
+        }
+    }
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverCarCancelled_SendCarCancelMsg(@Payload CarCancelled carCancelled){
+
+        if(carCancelled.isMe()) {
+            //////////////////
+            // 렌터카 취소 시
+            /////////////////
+
+            System.out.println("\n\n##### listener SendCarCancelMsg : " + carCancelled.toJson() + "\n\n");
+
+            long carId = carCancelled.getCarId();
+            String carName = carCancelled.getCarName();
+            long roomId = carCancelled.getRoomId(); // 연관 RoomId
+            String msgString = "렌터카가 예약이 취소 되었습니다. 방 번호 : [" + roomId + "], 렌터카번호["+carId+"], 렌터카명 ["+carName+"]";
+
+            // 메시지 전송
+            sendMsg(roomId, msgString);
+        } 
+
+    }
+
     private void sendMsg(long roomId, String msgString)     {
 
         //////////////////////////////////////////////
