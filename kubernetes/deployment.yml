@@ -36,3 +36,9 @@ spec:
             timeoutSeconds: 2
             periodSeconds: 5
             failureThreshold: 5
+          env:
+          - name: CITYNAME
+            valueFrom:
+              configMapKeyRef:
+                name: my-config
+                key: cityname

@@ -34,6 +34,11 @@ public class PolicyHandler{
             long roomId = reservationConfirmed.getRoomId(); // 예약 확정된 RoomId
             String msgString = "예약이 완료 되었습니다. 방 번호 : [" + roomId +"]";
 
+            String cityStr = System.getenv("CITYNAME");
+            if(!cityStr.isEmpty()) {
+                msgString += ", 도시명["+cityStr+"]";
+            }
+
             // 메시지 전송
             sendMsg(roomId, msgString);
         }
@@ -52,6 +57,11 @@ public class PolicyHandler{
             // roomId 추출
             long roomId = reservationCancelled.getRoomId(); // 취소된 RoomId
             String msgString = "예약이 취소 되었습니다. 방 번호 : [" + roomId +"]";
+
+            String cityStr = System.getenv("CITYNAME");
+            if(!cityStr.isEmpty()) {
+                msgString += ", 도시명["+cityStr+"]";
+            }
 
             // 메시지 전송
             sendMsg(roomId, msgString);
